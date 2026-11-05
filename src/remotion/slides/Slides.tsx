@@ -3,8 +3,22 @@ import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
 import {
   C, Card, CardTitle, FONT_BODY, FONT_DISPLAY, Background, Reveal, Slide, Text, typed,
 } from "../theme";
+import claudeLogo from "../logos/claude.svg";
+import openaiLogo from "../logos/openai.svg";
+import ollamaLogo from "../logos/ollama.svg";
+import antigravityLogo from "../logos/antigravity.svg";
 import { useAmbientFrame } from "../ambient";
 import { Bubble, Confetti, Robot, type Accessory, type Mood } from "../Robot";
+
+/** Logo de marca sobre una placa redondeada */
+const Logo: React.FC<{ src: string; size?: number; bg?: string }> = ({ src, size = 96, bg = "rgba(255,255,255,0.1)" }) => (
+  <div style={{
+    width: size, height: size, borderRadius: size * 0.26, background: bg, flex: "none",
+    display: "grid", placeItems: "center", border: `2px solid ${C.border}`,
+  }}>
+    <img src={src} width={size * 0.62} height={size * 0.62} alt="" />
+  </div>
+);
 
 const Mascot: React.FC<{ mood?: Mood; color?: string; accessory?: Accessory; wave?: boolean; size?: number }> = ({
   mood = "happy", color = C.teal, accessory = "none", wave = false, size = 190,
@@ -292,13 +306,15 @@ export const AppsEscritorio: React.FC = () => (
   <Slide kicker="Módulo III" title="Aplicaciones de escritorio" accent={C.violet}>
     <div style={{ display: "flex", gap: 32 }}>
       {[
-        { n: "Claude", c: C.amber, d: "Asistente conversacional y de código. Trabaja con tus archivos y carpetas." },
-        { n: "Codex", c: C.sky, d: "Agente de programación de OpenAI: lee, edita y ejecuta código en tu equipo." },
-        { n: "Antigravity", c: C.violet, d: "Entorno de desarrollo con agentes de Google que planifican y construyen." },
+        { n: "Claude", logo: claudeLogo, c: C.amber, d: "Asistente conversacional y de código. Trabaja con tus archivos y carpetas." },
+        { n: "Codex", logo: openaiLogo, c: C.sky, d: "Agente de programación de OpenAI: lee, edita y ejecuta código en tu equipo." },
+        { n: "Antigravity", logo: antigravityLogo, c: C.violet, d: "Entorno de desarrollo con agentes de Google que planifican y construyen." },
       ].map((a, i) => (
         <Card key={a.n} color={a.c} delay={20 + i * 14}>
-          <Robot size={150} color={a.c} mood={i === 1 ? "think" : i === 2 ? "wow" : "happy"} accessory={i === 1 ? "glasses" : "none"} delay={30 + i * 14} phase={i * 20} />
-          <CardTitle color={a.c}>{a.n}</CardTitle>
+          <div style={{ display: "flex", alignItems: "center", gap: 22, marginBottom: 26 }}>
+            <Logo src={a.logo} size={120} />
+            <div style={{ fontFamily: FONT_DISPLAY, fontSize: 52, fontWeight: 700, color: a.c }}>{a.n}</div>
+          </div>
           <Text size={32}>{a.d}</Text>
         </Card>
       ))}
@@ -315,16 +331,22 @@ export const Ollama: React.FC = () => {
   const amb = useAmbientFrame();
   const cmd = "ollama run llama3.2";
   return (
-    <Slide kicker="Módulo III" title="Modelos locales con Ollama" accent={C.violet} mascot={<Mascot mood="love" color={C.violet} />}>
+    <Slide kicker="Módulo III" title="Modelos locales con Ollama" accent={C.violet}>
       <div style={{ display: "flex", gap: 40 }}>
         <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 20 }}>
+          <Reveal delay={10} from="scale" style={{ alignSelf: "flex-start", marginBottom: 28 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
+              <Logo src={ollamaLogo} size={120} />
+              <div style={{ fontFamily: FONT_DISPLAY, fontSize: 72, fontWeight: 700 }}>Ollama</div>
+            </div>
+          </Reveal>
           {[
             ["🔒", "Privacidad", "Tus datos no salen de tu computadora"],
             ["💸", "Gratis", "Sin suscripción ni costo por uso"],
             ["✈️", "Sin internet", "Funciona offline una vez descargado"],
           ].map(([i, t, d], k) => (
             <Reveal key={t} delay={20 + k * 12} from="left">
-              <div style={{ display: "flex", gap: 22, alignItems: "center", fontSize: 38 }}>
+              <div style={{ display: "flex", gap: 22, alignItems: "center", fontSize: 34 }}>
                 <span style={{ fontSize: 56 }}>{i}</span>
                 <span><b style={{ color: C.violet }}>{t}</b> — <span style={{ color: C.muted }}>{d}</span></span>
               </div>
